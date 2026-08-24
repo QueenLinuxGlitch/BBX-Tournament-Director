@@ -1,6 +1,6 @@
 # Beyblade X Tournament Organizer
 
-A static GitHub Pages-compatible tournament organizer for Beyblade X events.
+A tournament organizer for Beyblade X events.
 
 ## Features
 
