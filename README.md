@@ -17,14 +17,6 @@ A static GitHub Pages-compatible tournament organizer for Beyblade X events.
 - Single elimination top cut seeded from standings.
 - Browser local storage with JSON export and import.
 
-## GitHub Pages
-
-Publish the folder as a static site. No build step is required.
-
-1. Push `index.html`, `styles.css`, and `app.js` to a GitHub repository.
-2. In repository settings, enable Pages for the branch and folder that contain the files.
-3. Open the Pages URL.
-
 ## Rule Reference
 
 The rules panel summarizes current WBO Beyblade X battle and match terminology: 1on1 Battle, 3on3 Battle, Counter Battle, and 4-point, 5-point, and 7-point matches. Confirm official WBO event requirements before using this for ranked events.
