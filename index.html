@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beyblade X Tournament Organizer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">Beyblade X</p>
+      <h1>Tournament Organizer</h1>
+    </div>
+    <div class="header-actions">
+      <button id="exportBtn" type="button" class="ghost-btn">Export</button>
+      <label class="ghost-btn file-btn">
+        Import
+        <input id="importInput" type="file" accept="application/json">
+      </label>
+      <button id="resetBtn" type="button" class="danger-btn">Reset</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <aside class="sidebar">
+      <nav class="tabs" aria-label="Organizer sections">
+        <button class="tab active" type="button" data-tab="setup">Setup</button>
+        <button class="tab" type="button" data-tab="swiss">Swiss</button>
+        <button class="tab" type="button" data-tab="standings">Standings</button>
+        <button class="tab" type="button" data-tab="topcut">Top Cut</button>
+        <button class="tab" type="button" data-tab="rules">Rules</button>
+      </nav>
+      <section class="status-panel">
+        <h2>Event Status</h2>
+        <dl>
+          <div><dt>Entries</dt><dd id="statusPlayers">0</dd></div>
+          <div><dt>Swiss Round</dt><dd id="statusRound">0</dd></div>
+          <div><dt>Swiss</dt><dd id="statusSwissFormat">3on3 / 4-point</dd></div>
+          <div><dt>Top Cut</dt><dd id="statusTopCutFormat">3on3 / 4-point</dd></div>
+          <div><dt>Stadium</dt><dd id="statusStadium">Xtreme Stadium</dd></div>
+          <div><dt>Cut Size</dt><dd id="statusCut">8</dd></div>
+        </dl>
+      </section>
+    </aside>
+
+    <section class="workspace">
+      <section id="setup" class="view active">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Roster and Format</p>
+            <h2>Set up the event</h2>
+          </div>
+          <button id="saveSettingsBtn" type="button" class="primary-btn">Save Settings</button>
+        </div>
+
+        <div class="setup-grid">
+          <form id="participantForm" class="panel">
+            <h3>Register entry</h3>
+            <div class="field-row">
+              <label for="entryType">Entry type</label>
+              <select id="entryType">
+                <option value="solo">Solo blader</option>
+                <option value="team">Team</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="playerName">Name</label>
+              <input id="playerName" type="text" autocomplete="off" placeholder="Blader or team name">
+            </div>
+            <div id="soloDeckFields" class="field-row">
+              <label for="soloDecklist">Decklist</label>
+              <textarea id="soloDecklist" rows="4" placeholder="One combo per line&#10;DranBrave S6-60V&#10;CobaltDragoon 2-60E"></textarea>
+            </div>
+            <div id="teamFields" class="team-fields hidden">
+              <label for="teamMembers" class="field-label">Team players and decklists</label>
+              <textarea id="teamMembers" rows="8" placeholder="Player name | decklist&#10;Alex | DranBrave S6-60V; CobaltDragoon 2-60E&#10;Sam | PhoenixWing 9-60GF"></textarea>
+            </div>
+            <button type="submit" class="primary-btn full">Add Entry</button>
+            <label for="bulkPlayers" class="field-label">Bulk add solo names</label>
+            <textarea id="bulkPlayers" rows="5" placeholder="One solo blader per line"></textarea>
+            <button id="bulkAddBtn" type="button" class="ghost-btn full">Add Solo List</button>
+          </form>
+
+          <form id="settingsForm" class="panel">
+            <h3>Swiss setup</h3>
+            <div class="field-row">
+              <label for="stadium">Stadium</label>
+              <select id="stadium">
+                <optgroup label="Takara Tomy">
+                  <option value="Takara Tomy BX-10 Xtreme Stadium">BX-10 Xtreme Stadium</option>
+                  <option value="Takara Tomy BX-07 Start Dash Set Xtreme Stadium">BX-07 Start Dash Set Xtreme Stadium</option>
+                  <option value="Takara Tomy BX-17 Battle Entry Set Xtreme Stadium">BX-17 Battle Entry Set Xtreme Stadium</option>
+                  <option value="Takara Tomy BX-00 Xtreme Stadium Light Package">BX-00 Xtreme Stadium Light Package</option>
+                  <option value="Takara Tomy UX-04 Battle Entry Set U Xtreme Stadium">UX-04 Battle Entry Set U Xtreme Stadium</option>
+                  <option value="Takara Tomy CX-04 Battle Entry Set C Stadium">CX-04 Battle Entry Set C Stadium</option>
+                  <option value="Takara Tomy CX-16 Start Dash Set C Stadium">CX-16 Start Dash Set C Stadium</option>
+                  <option value="Takara Tomy BX-32 Wide Xtreme Stadium">BX-32 Wide Xtreme Stadium</option>
+                  <option value="Takara Tomy BX-37 Double Xtreme Stadium">BX-37 Double Xtreme Stadium</option>
+                </optgroup>
+                <optgroup label="Hasbro">
+                  <option value="Hasbro G0318 Tournament Beystadium">G0318 Tournament Beystadium</option>
+                  <option value="Hasbro F9588 Xtreme Beystadium">F9588 Xtreme Beystadium</option>
+                  <option value="Hasbro G1863 Wide Beystadium">G1863 Wide Beystadium</option>
+                  <option value="Hasbro G1864 Double Xtreme Motorized Beystadium">G1864 Double Xtreme Motorized Beystadium</option>
+                  <option value="Hasbro Clash and Carry Beystadium">Clash and Carry Beystadium</option>
+                  <option value="Hasbro Bucket Stadium">Bucket Stadium</option>
+                  <option value="Hasbro Drop Attack Beystadium">Drop Attack Beystadium</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="swissBattleType">Battle type</label>
+              <select id="swissBattleType">
+                <option value="3on3">3on3 Battle</option>
+                <option value="1on1">1on1 Battle</option>
+                <option value="counter">Counter Battle</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="swissMatchType">Match type</label>
+              <select id="swissMatchType">
+                <option value="4">4-point Match</option>
+                <option value="5">5-point Match</option>
+                <option value="7">7-point Match</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="swissRounds">Swiss rounds</label>
+              <input id="swissRounds" type="number" min="1" max="12" value="3">
+            </div>
+            <div class="field-row">
+              <label for="topCutSize">Top cut</label>
+              <select id="topCutSize">
+                <option value="2">Top 2</option>
+                <option value="4">Top 4</option>
+                <option value="8" selected>Top 8</option>
+                <option value="16">Top 16</option>
+              </select>
+            </div>
+            <h3 class="subhead">Top cut setup</h3>
+            <div class="field-row">
+              <label for="topCutBattleType">Battle type</label>
+              <select id="topCutBattleType">
+                <option value="3on3">3on3 Battle</option>
+                <option value="1on1">1on1 Battle</option>
+                <option value="counter">Counter Battle</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="topCutMatchType">Match type</label>
+              <select id="topCutMatchType">
+                <option value="4">4-point Match</option>
+                <option value="5">5-point Match</option>
+                <option value="7">7-point Match</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="winPoints">Swiss match win</label>
+              <input id="winPoints" type="number" min="1" max="5" value="1">
+            </div>
+            <div class="optional-rules">
+              <h3 class="subhead">Swiss optional rules</h3>
+              <label class="check-row"><input id="swissOwnFinish" type="checkbox"> Own finish</label>
+              <label class="check-row"><input id="swissOutOfBounds" type="checkbox"> Out-of-bounds finish</label>
+              <div class="field-row compact-field">
+                <label for="swissOutOfBoundsPoints">Out-of-bounds points</label>
+                <select id="swissOutOfBoundsPoints">
+                  <option value="1">1 point</option>
+                  <option value="2">2 points</option>
+                </select>
+              </div>
+              <label class="check-row"><input id="swissRegisteredDeckList" type="checkbox"> Registered deck list</label>
+              <label class="check-row"><input id="swissRegisteredSideDeck" type="checkbox"> Registered side deck</label>
+              <label class="check-row"><input id="swissPaintedBlades" type="checkbox"> Painted blades allowed</label>
+              <label class="check-row"><input id="swissMnUnbanned" type="checkbox"> MN bit unbanned</label>
+            </div>
+            <div class="optional-rules">
+              <h3 class="subhead">Top cut optional rules</h3>
+              <label class="check-row"><input id="topCutOwnFinish" type="checkbox"> Own finish</label>
+              <label class="check-row"><input id="topCutOutOfBounds" type="checkbox"> Out-of-bounds finish</label>
+              <div class="field-row compact-field">
+                <label for="topCutOutOfBoundsPoints">Out-of-bounds points</label>
+                <select id="topCutOutOfBoundsPoints">
+                  <option value="1">1 point</option>
+                  <option value="2">2 points</option>
+                </select>
+              </div>
+              <label class="check-row"><input id="topCutRegisteredDeckList" type="checkbox"> Registered deck list</label>
+              <label class="check-row"><input id="topCutRegisteredSideDeck" type="checkbox"> Registered side deck</label>
+              <label class="check-row"><input id="topCutPaintedBlades" type="checkbox"> Painted blades allowed</label>
+              <label class="check-row"><input id="topCutMnUnbanned" type="checkbox"> MN bit unbanned</label>
+            </div>
+          </form>
+
+          <section class="panel roster-panel">
+            <div class="panel-title-row">
+              <h3>Participants</h3>
+              <span id="playerCount" class="pill">0 entries</span>
+            </div>
+            <div id="participantList" class="participant-list empty">No players added yet.</div>
+          </section>
+        </div>
+      </section>
+
+      <section id="swiss" class="view">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">First Stage</p>
+            <h2>Swiss pairings</h2>
+          </div>
+          <div class="action-row">
+            <button id="generateRoundBtn" type="button" class="primary-btn">Generate Next Round</button>
+            <button id="clearRoundBtn" type="button" class="ghost-btn">Clear Current Round</button>
+          </div>
+        </div>
+        <div id="roundInfo" class="notice"></div>
+        <div id="pairings" class="match-list"></div>
+      </section>
+
+      <section id="standings" class="view">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Live Rankings</p>
+            <h2>Standings</h2>
+          </div>
+          <button id="copyStandingsBtn" type="button" class="ghost-btn">Copy Text</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Entry</th>
+                <th>W</th>
+                <th>L</th>
+                <th>Draw</th>
+                <th>Byes</th>
+                <th>Match Pts</th>
+                <th>Buchholz</th>
+                <th>Battle Pts</th>
+              </tr>
+            </thead>
+            <tbody id="standingsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="topcut" class="view">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Final Stage</p>
+            <h2>Single elimination top cut</h2>
+          </div>
+          <div class="action-row">
+            <button id="seedTopCutBtn" type="button" class="primary-btn">Seed From Standings</button>
+            <button id="advanceCutBtn" type="button" class="ghost-btn">Build Next Round</button>
+          </div>
+        </div>
+        <div id="topCutNotice" class="notice"></div>
+        <div id="bracket" class="bracket"></div>
+      </section>
+
+      <section id="rules" class="view">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">WBO Reference</p>
+            <h2>Battle and match quick guide</h2>
+          </div>
+        </div>
+        <div class="rules-grid">
+          <article class="panel">
+            <h3>1on1 Battle</h3>
+            <p>Each blader selects one Bey and uses it for the full match.</p>
+          </article>
+          <article class="panel">
+            <h3>3on3 Battle</h3>
+            <p>Each blader uses an ordered deck of 3 Beys. After the 3rd Bey, both players may reorder in secret.</p>
+          </article>
+          <article class="panel">
+            <h3>Counter Battle</h3>
+            <p>Players reveal decks. After each battle, the previous battle loser calls rematch or counter.</p>
+          </article>
+          <article class="panel">
+            <h3>Match Types</h3>
+            <p>4-point, 5-point, and 7-point matches end when one blader wins one set at the selected point target.</p>
+          </article>
+          <article class="panel">
+            <h3>Finish Points</h3>
+            <p>Spin finishes score 1. Burst and over finishes score 2. Xtreme finishes score 3.</p>
+          </article>
+          <article class="panel">
+            <h3>Optional Finishes</h3>
+            <p>Own finish scores 1 when enabled. Out-of-bounds finish scores 1 or 2 as set by the organizer.</p>
+          </article>
+        </div>
+        <p class="source-note">Rule text summarized from the World Beyblade Organization Beyblade X Rulebook, crawled August 2026. Confirm official event requirements before running ranked events.</p>
+      </section>
+    </section>
+  </main>
+
+  <template id="playerTemplate">
+    <div class="player-row">
+      <span></span>
+      <div class="row-actions">
+        <button type="button" class="icon-btn edit-entry" aria-label="Edit entry">Edit</button>
+        <button type="button" class="icon-btn remove-entry" aria-label="Remove entry">x</button>
+      </div>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
